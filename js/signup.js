@@ -4,6 +4,7 @@ document.getElementById("signupForm").addEventListener("submit", function (e) {
   const name = document.getElementById("name").value.trim();
   const email = document.getElementById("email").value.trim();
   const password = document.getElementById("password").value.trim();
+  const confirmPassword = document.getElementById("confirmPassword").value.trim();
 
   let valid = true;
 
@@ -21,6 +22,11 @@ document.getElementById("signupForm").addEventListener("submit", function (e) {
     showError("passwordError", "Password must be at least 8 characters");
     valid = false;
   } else clearError("passwordError");
+
+  if (password !== confirmPassword) {
+    showError("confirmPasswordError", "Passwords do not match");
+    valid = false;
+  } else clearError("confirmPasswordError");
 
   if (!valid) return;
 
