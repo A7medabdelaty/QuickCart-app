@@ -55,38 +55,41 @@ class HomePage {
       .map(
         (product) => `
             <div class="product-card" data-product-id="${product.id}">
-                <div class="product-image">
-                    <img src="${product.image}" alt="${
+                <a href="product-details.html?id=${product.id}" class="product-link">
+                    <div class="product-image">
+                        <img src="${product.image}" alt="${
           product.title
         }" loading="lazy">
-                    <div class="product-overlay">
-                        <button class="btn btn-primary add-to-cart-btn" data-product-id="${
-                          product.id
-                        }">
-                            <i class="fas fa-shopping-cart"></i> Add to Cart
-                        </button>
+                        <div class="product-overlay">
+                            <button class="btn btn-primary add-to-cart-btn" data-product-id="${
+                              product.id
+                            }">
+                                <i class="fas fa-shopping-cart"></i> Add to Cart
+                            </button>
+                        </div>
                     </div>
-                </div>
-                <div class="product-info">
-                    <div class="product-category">${product.category}</div>
-                    <h3 class="product-title">${product.title}</h3>
-                    <div class="product-rating">
-                        ${this.renderStars(product.rating.rate)}
-                        <span class="rating-count">(${
-                          product.rating.count
-                        })</span>
+                    <div class="product-info">
+                        <div class="product-category">${product.category}</div>
+                        <h3 class="product-title">${product.title}</h3>
+                        <div class="product-rating">
+                            ${this.renderStars(product.rating.rate)}
+                            <span class="rating-count">(${
+                              product.rating.count
+                            })</span>
+                        </div>
+                        <div class="product-price">${Helpers.formatCurrency(
+                          product.price
+                        )}</div>
                     </div>
-                    <div class="product-price">${Helpers.formatCurrency(
-                      product.price
-                    )}</div>
-                </div>
+                </a>
             </div>
         `
       )
       .join("");
 
-    // Add event listeners for add to cart buttons
+    // Add event listeners for add to cart buttons and product links
     this.setupAddToCartButtons(container);
+    this.setupProductLinks(container);
   }
 
   renderStars(rating) {
@@ -134,6 +137,18 @@ class HomePage {
           console.error("Error adding to cart:", error);
           Helpers.showNotification("Failed to add item to cart", "error");
         }
+      });
+    });
+  }
+
+  setupProductLinks(container) {
+    const addToCartButtons = container.querySelectorAll(".add-to-cart-btn");
+    
+    // Prevent product link navigation when clicking add to cart button
+    addToCartButtons.forEach((button) => {
+      button.addEventListener("click", (e) => {
+        e.preventDefault();
+        e.stopPropagation();
       });
     });
   }
