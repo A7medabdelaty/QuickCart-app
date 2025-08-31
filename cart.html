@@ -4,9 +4,143 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>QuickCart - Shopping Cart</title>
-    <link rel="stylesheet" href="css/main.css" />
+    <link rel="stylesheet" href="src/styles/main.css" />
   </head>
   <body>
-    <script src="src/js/cart.js"></script>
+    <!-- Navigation -->
+    <nav class="navbar">
+      <div class="nav-container">
+        <div class="nav-logo">
+          <a href="index.html">QuickCart</a>
+        </div>
+        <ul class="nav-menu">
+          <li class="nav-item">
+            <a href="index.html" class="nav-link">
+              <i class="fas fa-home"></i>
+              Home
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="cart.html" class="nav-link active">
+              <i class="fas fa-shopping-cart"></i>
+              Cart
+              <span class="cart-count">0</span>
+            </a>
+          </li>
+        </ul>
+        <div class="hamburger">
+          <span class="bar"></span>
+          <span class="bar"></span>
+          <span class="bar"></span>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <div class="container">
+        <!-- Page Header -->
+        <section class="cart-header">
+          <h1 class="page-title">
+            <i class="fas fa-shopping-cart"></i>
+            Shopping Cart
+          </h1>
+          <p class="page-subtitle">Review and manage your selected items</p>
+        </section>
+
+        <!-- Empty Cart State -->
+        <section id="emptyCart" class="empty-cart" style="display: none;">
+          <div class="empty-cart-content">
+            <div class="empty-cart-icon">
+              <i class="fas fa-shopping-cart"></i>
+            </div>
+            <h2>Your cart is empty</h2>
+            <p>Looks like you haven't added any items to your cart yet.</p>
+            <button id="continueShoppingBtn" class="btn btn-primary btn-lg">
+              <i class="fas fa-arrow-left"></i>
+              Continue Shopping
+            </button>
+          </div>
+        </section>
+
+        <!-- Cart Content -->
+        <section id="cartContent" class="cart-content">
+          <div class="cart-layout">
+            <!-- Cart Items -->
+            <div class="cart-items-section">
+              <div class="cart-section-header">
+                <h2>Items in Your Cart</h2>
+                <button id="clearCartBtn" class="btn btn-secondary btn-sm">
+                  <i class="fas fa-trash"></i>
+                  Clear Cart
+                </button>
+              </div>
+              <div id="cartItems" class="cart-items">
+                <!-- Cart items will be dynamically inserted here -->
+              </div>
+            </div>
+
+            <!-- Cart Summary -->
+            <div class="cart-summary-section">
+              <div class="cart-summary">
+                <h3>Order Summary</h3>
+                
+                <div class="summary-row">
+                  <span>Items:</span>
+                  <span id="cartItemCount">0 items</span>
+                </div>
+                
+                <div class="summary-row">
+                  <span>Subtotal:</span>
+                  <span id="cartSubtotal">$0.00</span>
+                </div>
+                
+                <div class="summary-row">
+                  <span>Shipping:</span>
+                  <span id="cartShipping">$0.00</span>
+                </div>
+                
+                <div class="summary-row">
+                  <span>Tax:</span>
+                  <span id="cartTax">$0.00</span>
+                </div>
+                
+                <div class="summary-divider"></div>
+                
+                <div class="summary-row total-row">
+                  <span>Total:</span>
+                  <span id="cartTotal">$0.00</span>
+                </div>
+                
+                <div id="shippingMessage" class="shipping-message">
+                  <i class="fas fa-truck"></i>
+                  Add $50.00 more for free shipping
+                </div>
+                
+                <div class="cart-actions">
+                  <button id="checkoutBtn" class="btn btn-primary btn-full btn-lg">
+                    <i class="fas fa-credit-card"></i>
+                    Proceed to Checkout
+                  </button>
+                  <button id="continueShoppingBtn" class="btn btn-secondary btn-full">
+                    <i class="fas fa-arrow-left"></i>
+                    Continue Shopping
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="container">
+        <p>&copy; 2025 QuickCart. All rights reserved. Ahmed Abdelaty</p>
+      </div>
+    </footer>
+
+    <script type="module" src="src/JS/cart.js"></script>
   </body>
 </html>

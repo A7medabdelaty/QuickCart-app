@@ -4,9 +4,73 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>QuickCart - Checkout</title>
-    <link rel="stylesheet" href="css/main.css" />
+    <link rel="stylesheet" href="src/styles/main.css" />
   </head>
   <body>
-    <script src="src/js/checkout.js"></script>
+    <!-- Navigation -->
+    <nav class="navbar">
+      <div class="nav-container">
+        <div class="nav-logo">
+          <a href="index.html">QuickCart</a>
+        </div>
+        <ul class="nav-menu">
+          <li class="nav-item">
+            <a href="index.html" class="nav-link">
+              <i class="fas fa-home"></i> Home
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="#contact" class="nav-link">
+              <i class="fas fa-envelope"></i> Contact Us
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="cart.html" class="nav-link">
+              <i class="fas fa-shopping-cart"></i> Cart
+              <span class="cart-count">0</span>
+            </a>
+          </li>
+        </ul>
+        <div class="nav-user">
+          <span class="username">
+            <i class="fas fa-user"></i>
+            <span id="currentUser">Guest</span>
+          </span>
+          <button class="logout-btn" id="logoutBtn">
+            <i class="fas fa-sign-out-alt"></i> Logout
+          </button>
+        </div>
+        <div class="hamburger">
+          <span class="bar"></span>
+          <span class="bar"></span>
+          <span class="bar"></span>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <div class="container">
+        <h1 class="page-title">
+          <i class="fas fa-credit-card"></i>
+          Checkout
+        </h1>
+        <p class="page-subtitle">Complete your purchase</p>
+        
+        <!-- Checkout content will go here -->
+        <div class="checkout-placeholder">
+          <p>Checkout functionality coming soon...</p>
+        </div>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="container">
+        <p>&copy; 2025 QuickCart. All rights reserved. Ahmed Abdelaty</p>
+      </div>
+    </footer>
+
+    <script type="module" src="src/JS/checkout.js"></script>
   </body>
 </html>
