@@ -1,5 +1,7 @@
 /* Section Layouts */
-.section {
+.section,
+.features,
+.contact {
   padding: var(--space-24) 0;
 }
 
@@ -13,7 +15,6 @@
 
 /* Features Section */
 .features {
-  padding: var(--space-24) 0;
   background: var(--white);
 }
 
@@ -26,7 +27,6 @@
 
 /* Contact Section */
 .contact {
-  padding: var(--space-24) 0;
   background: var(--gray-50);
 }
 

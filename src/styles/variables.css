@@ -27,6 +27,7 @@
   --font-size-xs: 0.75rem;
   --font-size-sm: 0.875rem;
   --font-size-base: 1rem;
+  --font-size-md: 1rem; /* Added missing md size */
   --font-size-lg: 1.125rem;
   --font-size-xl: 1.25rem;
   --font-size-2xl: 1.5rem;
@@ -77,5 +78,16 @@
   
   /* Layout */
   --container-max-width: 1200px;
+  --container-padding: var(--space-5);
   --navbar-height: 70px;
+  
+  /* Z-Index System */
+  --z-dropdown: 100;
+  --z-sticky: 200;
+  --z-navbar: 1000;
+  --z-modal: 2000;
+  --z-notification: 9999;
+  
+  /* Success Color Variants */
+  --success-hover: #059669;
 }
