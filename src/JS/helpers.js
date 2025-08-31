@@ -108,4 +108,10 @@ export class Helpers {
             timeout = setTimeout(later, wait);
         };
     }
+
+    // Email validation helper
+    static validateEmail(email) {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email.trim());
+    }
 }
