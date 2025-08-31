@@ -1,15 +1,12 @@
 // Product Details Page JavaScript
-import { Navbar } from "./navbar.js";
-import { AuthManager } from "./auth.js";
-import { CartManager } from "./cart.js";
-import { Helpers } from "./helpers.js";
+import { BasePage } from "./base-page.js";
 import { ApiService } from "./api.js";
+import { Helpers } from "./helpers.js";
+import { CONSTANTS } from "./constants.js";
 
-class ProductDetailsPage {
+class ProductDetailsPage extends BasePage {
   constructor() {
-    this.navbar = new Navbar();
-    this.authManager = new AuthManager();
-    this.cartManager = new CartManager();
+    super();
     this.productId = null;
     this.product = null;
     this.quantity = 1;
@@ -23,7 +20,6 @@ class ProductDetailsPage {
     this.setupAddToCartButton();
     this.loadProductDetails();
     Helpers.setupSmoothScrolling();
-    Helpers.setupButtonLoading();
   }
 
   getProductIdFromUrl() {
@@ -43,22 +39,20 @@ class ProductDetailsPage {
 
     try {
       // Show loading state
-      loadingElement.style.display = "block";
-      contentElement.style.display = "none";
-      errorElement.style.display = "none";
+      this.setLoadingState(loadingElement, contentElement, errorElement, true);
 
       // Fetch product details from API
       this.product = await ApiService.getProduct(this.productId);
 
-      // Hide loading and show content
-      loadingElement.style.display = "none";
-      contentElement.style.display = "block";
+      // Show content
+      this.setLoadingState(loadingElement, contentElement, errorElement, false);
 
       // Render product details
       this.renderProductDetails();
     } catch (error) {
       console.error("Error loading product details:", error);
-      this.showError("Failed to load product details");
+      this.setLoadingState(loadingElement, contentElement, errorElement, false, true);
+      this.showError(errorElement, "Failed to load product details");
     }
   }
 
@@ -83,7 +77,7 @@ class ProductDetailsPage {
 
     // Product rating
     const productRating = document.getElementById("productRating");
-    productRating.innerHTML = this.renderStars(this.product.rating.rate);
+    productRating.innerHTML = Helpers.renderStars(this.product.rating.rate);
 
     const ratingText = document.getElementById("ratingText");
     ratingText.textContent = `${this.product.rating.rate}/5 (${this.product.rating.count} reviews)`;
@@ -97,17 +91,6 @@ class ProductDetailsPage {
     productDescription.textContent = this.product.description;
   }
 
-  renderStars(rating) {
-    const fullStars = Math.floor(rating);
-    const hasHalfStar = rating % 1 !== 0;
-    const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
-
-    return `
-      ${'<i class="fas fa-star"></i>'.repeat(fullStars)}
-      ${hasHalfStar ? '<i class="fas fa-star-half-alt"></i>' : ""}
-      ${'<i class="far fa-star"></i>'.repeat(emptyStars)}
-    `;
-  }
 
   setupQuantityControls() {
     const quantityInput = document.getElementById("quantity");
@@ -117,7 +100,7 @@ class ProductDetailsPage {
     // Decrease quantity
     decreaseBtn.addEventListener("click", () => {
       const currentValue = parseInt(quantityInput.value);
-      if (currentValue > 1) {
+      if (currentValue > CONSTANTS.MIN_QUANTITY) {
         quantityInput.value = currentValue - 1;
         this.quantity = currentValue - 1;
       }
@@ -126,7 +109,7 @@ class ProductDetailsPage {
     // Increase quantity
     increaseBtn.addEventListener("click", () => {
       const currentValue = parseInt(quantityInput.value);
-      if (currentValue < 10) {
+      if (currentValue < CONSTANTS.MAX_QUANTITY) {
         quantityInput.value = currentValue + 1;
         this.quantity = currentValue + 1;
       }
@@ -135,8 +118,8 @@ class ProductDetailsPage {
     // Handle direct input
     quantityInput.addEventListener("change", (e) => {
       let value = parseInt(e.target.value);
-      if (value < 1) value = 1;
-      if (value > 10) value = 10;
+      if (value < CONSTANTS.MIN_QUANTITY) value = CONSTANTS.MIN_QUANTITY;
+      if (value > CONSTANTS.MAX_QUANTITY) value = CONSTANTS.MAX_QUANTITY;
       e.target.value = value;
       this.quantity = value;
     });
@@ -147,51 +130,10 @@ class ProductDetailsPage {
 
     addToCartBtn.addEventListener("click", async () => {
       if (!this.product) return;
-
-      try {
-        // Add to cart with specified quantity
-        for (let i = 0; i < this.quantity; i++) {
-          this.cartManager.addItem(this.product);
-        }
-
-        // Show success notification
-        const quantityText =
-          this.quantity > 1 ? ` (${this.quantity} items)` : "";
-        Helpers.showNotification(
-          `${this.product.title}${quantityText} added to cart!`,
-          "success"
-        );
-
-        // Update button state temporarily
-        const originalText = addToCartBtn.innerHTML;
-        addToCartBtn.innerHTML = '<i class="fas fa-check"></i> Added to Cart!';
-        addToCartBtn.disabled = true;
-
-        setTimeout(() => {
-          addToCartBtn.innerHTML = originalText;
-          addToCartBtn.disabled = false;
-        }, 2000);
-      } catch (error) {
-        console.error("Error adding to cart:", error);
-        Helpers.showNotification("Failed to add item to cart", "error");
-      }
+      await this.addToCart(this.product, this.quantity, addToCartBtn);
     });
   }
 
-  showError(message) {
-    const loadingElement = document.getElementById("productLoading");
-    const contentElement = document.getElementById("productDetailsContent");
-    const errorElement = document.getElementById("productError");
-
-    loadingElement.style.display = "none";
-    contentElement.style.display = "none";
-    errorElement.style.display = "block";
-
-    const errorText = errorElement.querySelector("p");
-    if (errorText) {
-      errorText.textContent = message;
-    }
-  }
 }
 
 // Initialize when DOM is loaded

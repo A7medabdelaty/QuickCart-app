@@ -1,74 +1,64 @@
 // Navbar Component JavaScript
+import { CONSTANTS } from "./constants.js";
+import { Helpers } from "./helpers.js";
+
 export class Navbar {
     constructor() {
         this.hamburger = document.querySelector('.hamburger');
         this.navMenu = document.querySelector('.nav-menu');
-        this.navbar = document.querySelector('.navbar');
-        this.lastScrollTop = 0;
-        
         this.init();
     }
 
     init() {
         this.setupMobileToggle();
-        this.setupScrollEffect();
         this.updateActiveLink();
     }
 
     setupMobileToggle() {
-        if (this.hamburger && this.navMenu) {
-            this.hamburger.addEventListener('click', () => {
-                this.hamburger.classList.toggle('active');
-                this.navMenu.classList.toggle('active');
-            });
-
-            // Close mobile menu when clicking on a link
-            document.querySelectorAll('.nav-link').forEach(link => {
-                link.addEventListener('click', () => {
-                    this.hamburger.classList.remove('active');
-                    this.navMenu.classList.remove('active');
-                });
-            });
+        if (!this.hamburger || !this.navMenu) {
+            console.warn('Mobile navigation elements not found');
+            return;
         }
-    }
+        
+        this.hamburger.addEventListener('click', () => {
+            this.hamburger.classList.toggle(CONSTANTS.CSS_CLASSES.ACTIVE);
+            this.navMenu.classList.toggle(CONSTANTS.CSS_CLASSES.ACTIVE);
+        });
 
-    setupScrollEffect() {
-        window.addEventListener('scroll', () => {
-            let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-            
-            if (scrollTop > this.lastScrollTop && scrollTop > 100) {
-                // Scrolling down
-                this.navbar.style.transform = 'translateY(-100%)';
-            } else {
-                // Scrolling up
-                this.navbar.style.transform = 'translateY(0)';
-            }
-            
-            this.lastScrollTop = scrollTop;
+        // Close mobile menu when clicking on a link
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', () => {
+                this.hamburger.classList.remove(CONSTANTS.CSS_CLASSES.ACTIVE);
+                this.navMenu.classList.remove(CONSTANTS.CSS_CLASSES.ACTIVE);
+            });
         });
     }
 
     updateActiveLink() {
         const sections = document.querySelectorAll('section[id]');
         const navLinks = document.querySelectorAll('.nav-link');
+        
+        if (!sections.length || !navLinks.length) return;
 
         const updateActive = () => {
             let current = '';
             sections.forEach(section => {
                 const sectionTop = section.offsetTop;
-                if (scrollY >= (sectionTop - 200)) {
+                if (scrollY >= (sectionTop - CONSTANTS.SCROLL_OFFSET)) {
                     current = section.getAttribute('id');
                 }
             });
 
             navLinks.forEach(link => {
-                link.classList.remove('active');
+                link.classList.remove(CONSTANTS.CSS_CLASSES.ACTIVE);
                 if (link.getAttribute('href') === `#${current}`) {
-                    link.classList.add('active');
+                    link.classList.add(CONSTANTS.CSS_CLASSES.ACTIVE);
                 }
             });
         };
 
-        window.addEventListener('scroll', updateActive);
+        // Add debouncing to scroll event for better performance
+        const debouncedUpdateActive = Helpers.debounce(updateActive, 100);
+        window.addEventListener('scroll', debouncedUpdateActive);
     }
 }

@@ -1,24 +1,17 @@
 // Home Page JavaScript
-import { Navbar } from "./navbar.js";
-import { AuthManager } from "./auth.js";
-import { CartManager } from "./cart.js";
-import { Helpers } from "./helpers.js";
+import { BasePage } from "./base-page.js";
 import { ApiService } from "./api.js";
+import { Helpers } from "./helpers.js";
 
-class HomePage {
+class HomePage extends BasePage {
   constructor() {
-    this.navbar = new Navbar();
-    this.authManager = new AuthManager();
-    this.cartManager = new CartManager();
-
+    super();
     this.init();
   }
 
   init() {
     this.setupContactForm();
     this.loadProducts();
-    Helpers.setupSmoothScrolling();
-    Helpers.setupButtonLoading();
   }
 
   async loadProducts() {
@@ -28,25 +21,21 @@ class HomePage {
 
     try {
       // Show loading state
-      loadingElement.style.display = "block";
-      gridElement.style.display = "none";
-      errorElement.style.display = "none";
+      this.setLoadingState(loadingElement, gridElement, errorElement, true);
 
-      // Fetch products from API and duplicate to show more
-      const products = await ApiService.getProducts();
-      const duplicatedProducts = [...products, ...products];
-      const featuredProducts = duplicatedProducts;
+      // Fetch products from API
+      const featuredProducts = await ApiService.getProducts();
 
-      // Hide loading and show grid
-      loadingElement.style.display = "none";
-      gridElement.style.display = "grid";
+      // Show grid
+      this.setLoadingState(loadingElement, gridElement, errorElement, false);
+      gridElement.style.display = "grid"; // Override to show as grid
 
       // Render products
       this.renderProducts(featuredProducts, gridElement);
     } catch (error) {
       console.error("Error loading products:", error);
-      loadingElement.style.display = "none";
-      errorElement.style.display = "block";
+      this.setLoadingState(loadingElement, gridElement, errorElement, false, true);
+      this.showError(errorElement, "Failed to load products");
     }
   }
 
@@ -74,7 +63,7 @@ class HomePage {
                         <div class="product-category">${product.category}</div>
                         <h3 class="product-title">${product.title}</h3>
                         <div class="product-rating">
-                            ${this.renderStars(product.rating.rate)}
+                            ${Helpers.renderStars(product.rating.rate)}
                             <span class="rating-count">(${
                               product.rating.count
                             })</span>
@@ -94,65 +83,32 @@ class HomePage {
     this.setupProductLinks(container);
   }
 
-  renderStars(rating) {
-    const fullStars = Math.floor(rating);
-    const hasHalfStar = rating % 1 !== 0;
-    const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
-
-    return `
-            ${'<i class="fas fa-star"></i>'.repeat(fullStars)}
-            ${hasHalfStar ? '<i class="fas fa-star-half-alt"></i>' : ""}
-            ${'<i class="far fa-star"></i>'.repeat(emptyStars)}
-        `;
-  }
 
   setupAddToCartButtons(container) {
     const addToCartButtons = container.querySelectorAll(".add-to-cart-btn");
     addToCartButtons.forEach((button) => {
       button.addEventListener("click", async (e) => {
         e.preventDefault();
+        e.stopPropagation();
         const productId = parseInt(button.dataset.productId);
 
         try {
           // Get product details
           const product = await ApiService.getProduct(productId);
-
-          // Add to cart
-          this.cartManager.addItem(product);
-
-          // Show success notification
-          Helpers.showNotification(
-            `${product.title} added to cart!`,
-            "success"
-          );
-
-          // Update button state temporarily
-          const originalText = button.innerHTML;
-          button.innerHTML = '<i class="fas fa-check"></i> Added!';
-          button.disabled = true;
-
-          setTimeout(() => {
-            button.innerHTML = originalText;
-            button.disabled = false;
-          }, 2000);
+          
+          // Use consolidated add to cart functionality
+          await this.addToCart(product, 1, button);
         } catch (error) {
-          console.error("Error adding to cart:", error);
-          Helpers.showNotification("Failed to add item to cart", "error");
+          console.error("Error loading product for cart:", error);
+          Helpers.showNotification("Failed to load product details", "error");
         }
       });
     });
   }
 
   setupProductLinks(container) {
-    const addToCartButtons = container.querySelectorAll(".add-to-cart-btn");
-
-    // Prevent product link navigation when clicking add to cart button
-    addToCartButtons.forEach((button) => {
-      button.addEventListener("click", (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-      });
-    });
+    // Event prevention is now handled in setupAddToCartButtons
+    // This method can be removed or used for other product link functionality
   }
 
   setupContactForm() {

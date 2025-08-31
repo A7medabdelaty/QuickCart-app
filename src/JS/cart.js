@@ -1,4 +1,6 @@
 // Cart Management Utilities
+import { CONSTANTS } from "./constants.js";
+
 export class CartManager {
     constructor() {
         this.cartCount = document.querySelector('.cart-count');
@@ -22,28 +24,33 @@ export class CartManager {
     }
 
     getCart() {
-        const cart = localStorage.getItem('cart');
+        const cart = localStorage.getItem(CONSTANTS.CART_STORAGE_KEY);
         return cart ? JSON.parse(cart) : [];
     }
 
-    addToCart(product) {
+    addItem(product, quantity = 1) {
         const cart = this.getCart();
         const existingItem = cart.find(item => item.id === product.id);
 
         if (existingItem) {
-            existingItem.quantity += 1;
+            existingItem.quantity += quantity;
         } else {
-            cart.push({ ...product, quantity: 1 });
+            cart.push({ ...product, quantity });
         }
 
-        localStorage.setItem('cart', JSON.stringify(cart));
+        localStorage.setItem(CONSTANTS.CART_STORAGE_KEY, JSON.stringify(cart));
         this.updateCartCount();
+    }
+
+    // Keep backward compatibility
+    addToCart(product) {
+        this.addItem(product, 1);
     }
 
     removeFromCart(productId) {
         const cart = this.getCart();
         const updatedCart = cart.filter(item => item.id !== productId);
-        localStorage.setItem('cart', JSON.stringify(updatedCart));
+        localStorage.setItem(CONSTANTS.CART_STORAGE_KEY, JSON.stringify(updatedCart));
         this.updateCartCount();
     }
 
@@ -56,14 +63,14 @@ export class CartManager {
                 this.removeFromCart(productId);
             } else {
                 item.quantity = quantity;
-                localStorage.setItem('cart', JSON.stringify(cart));
+                localStorage.setItem(CONSTANTS.CART_STORAGE_KEY, JSON.stringify(cart));
                 this.updateCartCount();
             }
         }
     }
 
     clearCart() {
-        localStorage.removeItem('cart');
+        localStorage.removeItem(CONSTANTS.CART_STORAGE_KEY);
         this.updateCartCount();
     }
 

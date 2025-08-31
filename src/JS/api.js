@@ -1,6 +1,8 @@
 // API Service for external API calls
+import { CONSTANTS } from "./constants.js";
+
 export class ApiService {
-    static BASE_URL = 'https://fakestoreapi.com';
+    static BASE_URL = CONSTANTS.API_BASE_URL;
 
     // Generic fetch method with error handling
     static async fetchData(endpoint) {

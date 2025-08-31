@@ -2,7 +2,6 @@ export class AuthManager {
     constructor() {
         this.currentUser = document.getElementById('currentUser');
         this.logoutBtn = document.getElementById('logoutBtn');
-        
         this.init();
     }
 
@@ -12,8 +11,8 @@ export class AuthManager {
     }
 
     updateUserStatus() {
-        const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
-        const username = localStorage.getItem('username') || 'Guest';
+        const isLoggedIn = this.isLoggedIn();
+        const username = this.getCurrentUser() || 'Guest';
         
         if (this.currentUser) {
             this.currentUser.textContent = isLoggedIn ? username : 'Guest';
@@ -25,11 +24,7 @@ export class AuthManager {
     }
 
     setupLogout() {
-        if (this.logoutBtn) {
-            this.logoutBtn.addEventListener('click', () => {
-                this.logout();
-            });
-        }
+        this.logoutBtn?.addEventListener('click', () => this.logout());
     }
 
     login(username) {
