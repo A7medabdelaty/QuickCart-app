@@ -1,9 +1,9 @@
 // Product Details Page JavaScript
-import { Navbar } from "../components/navbar.js";
-import { AuthManager } from "../utils/auth.js";
-import { CartManager } from "../utils/cart.js";
-import { Helpers } from "../utils/helpers.js";
-import { ApiService } from "../utils/api.js";
+import { Navbar } from "./navbar.js";
+import { AuthManager } from "./auth.js";
+import { CartManager } from "./cart.js";
+import { Helpers } from "./helpers.js";
+import { ApiService } from "./api.js";
 
 class ProductDetailsPage {
   constructor() {
@@ -29,7 +29,7 @@ class ProductDetailsPage {
   getProductIdFromUrl() {
     const urlParams = new URLSearchParams(window.location.search);
     this.productId = urlParams.get("id");
-    
+
     if (!this.productId) {
       this.showError("Product ID not found in URL");
       return;
@@ -56,7 +56,6 @@ class ProductDetailsPage {
 
       // Render product details
       this.renderProductDetails();
-
     } catch (error) {
       console.error("Error loading product details:", error);
       this.showError("Failed to load product details");
@@ -145,7 +144,7 @@ class ProductDetailsPage {
 
   setupAddToCartButton() {
     const addToCartBtn = document.getElementById("addToCartBtn");
-    
+
     addToCartBtn.addEventListener("click", async () => {
       if (!this.product) return;
 
@@ -156,7 +155,8 @@ class ProductDetailsPage {
         }
 
         // Show success notification
-        const quantityText = this.quantity > 1 ? ` (${this.quantity} items)` : "";
+        const quantityText =
+          this.quantity > 1 ? ` (${this.quantity} items)` : "";
         Helpers.showNotification(
           `${this.product.title}${quantityText} added to cart!`,
           "success"
@@ -171,7 +171,6 @@ class ProductDetailsPage {
           addToCartBtn.innerHTML = originalText;
           addToCartBtn.disabled = false;
         }, 2000);
-
       } catch (error) {
         console.error("Error adding to cart:", error);
         Helpers.showNotification("Failed to add item to cart", "error");

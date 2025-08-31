@@ -1,9 +1,9 @@
 // Home Page JavaScript
-import { Navbar } from "../components/navbar.js";
-import { AuthManager } from "../utils/auth.js";
-import { CartManager } from "../utils/cart.js";
-import { Helpers } from "../utils/helpers.js";
-import { ApiService } from "../utils/api.js";
+import { Navbar } from "./navbar.js";
+import { AuthManager } from "./auth.js";
+import { CartManager } from "./cart.js";
+import { Helpers } from "./helpers.js";
+import { ApiService } from "./api.js";
 
 class HomePage {
   constructor() {
@@ -55,7 +55,9 @@ class HomePage {
       .map(
         (product) => `
             <div class="product-card" data-product-id="${product.id}">
-                <a href="product-details.html?id=${product.id}" class="product-link">
+                <a href="product-details.html?id=${
+                  product.id
+                }" class="product-link">
                     <div class="product-image">
                         <img src="${product.image}" alt="${
           product.title
@@ -143,7 +145,7 @@ class HomePage {
 
   setupProductLinks(container) {
     const addToCartButtons = container.querySelectorAll(".add-to-cart-btn");
-    
+
     // Prevent product link navigation when clicking add to cart button
     addToCartButtons.forEach((button) => {
       button.addEventListener("click", (e) => {
