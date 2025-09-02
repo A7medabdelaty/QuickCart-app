@@ -1,4 +1,3 @@
-// Product Details Page JavaScript
 import { BasePage } from "./base-page.js";
 import { ApiService } from "./api.js";
 import { Helpers } from "./helpers.js";
@@ -10,7 +9,6 @@ class ProductDetailsPage extends BasePage {
     this.productId = null;
     this.product = null;
     this.quantity = 1;
-
     this.init();
   }
 
@@ -26,7 +24,7 @@ class ProductDetailsPage extends BasePage {
     const urlParams = new URLSearchParams(window.location.search);
     this.productId = urlParams.get("id");
 
-    if (!this.productId) {
+    if (this.productId == null) {
       this.showError("Product ID not found in URL");
       return;
     }
@@ -38,55 +36,52 @@ class ProductDetailsPage extends BasePage {
     const errorElement = document.getElementById("productError");
 
     try {
-      // Show loading state
-      this.setLoadingState(loadingElement, contentElement, errorElement, true);
+      loadingElement.style.display = "block";
+      contentElement.style.display = "none";
+      errorElement.style.display = "none";
 
-      // Fetch product details from API
       this.product = await ApiService.getProduct(this.productId);
 
-      // Show content
-      this.setLoadingState(loadingElement, contentElement, errorElement, false);
+      loadingElement.style.display = "none";
+      contentElement.style.display = "block";
+      errorElement.style.display = "none";
 
-      // Render product details
       this.renderProductDetails();
     } catch (error) {
       console.error("Error loading product details:", error);
-      this.setLoadingState(loadingElement, contentElement, errorElement, false, true);
+      loadingElement.style.display = "none";
+      contentElement.style.display = "none";
+      errorElement.style.display = "block";
       this.showError(errorElement, "Failed to load product details");
     }
   }
 
   renderProductDetails() {
-    if (!this.product) return;
+    if (this.product == null) {
+      return;
+    }
 
-    // Update page title
-    document.title = `QuickCart - ${this.product.title}`;
+    document.title = "QuickCart - " + this.product.title;
 
-    // Product image
     const productImage = document.getElementById("productImage");
     productImage.src = this.product.image;
     productImage.alt = this.product.title;
 
-    // Product category (breadcrumb)
     const productCategory = document.getElementById("productCategory");
     productCategory.textContent = this.product.category;
 
-    // Product title
     const productTitle = document.getElementById("productTitle");
     productTitle.textContent = this.product.title;
 
-    // Product rating
     const productRating = document.getElementById("productRating");
     productRating.innerHTML = Helpers.renderStars(this.product.rating.rate);
 
     const ratingText = document.getElementById("ratingText");
-    ratingText.textContent = `${this.product.rating.rate}/5 (${this.product.rating.count} reviews)`;
+    ratingText.textContent = this.product.rating.rate + "/5 (" + this.product.rating.count + " reviews)";
 
-    // Product price
     const productPrice = document.getElementById("productPrice");
     productPrice.textContent = Helpers.formatCurrency(this.product.price);
 
-    // Product description
     const productDescription = document.getElementById("productDescription");
     productDescription.textContent = this.product.description;
   }
@@ -97,46 +92,55 @@ class ProductDetailsPage extends BasePage {
     const decreaseBtn = document.getElementById("decreaseQty");
     const increaseBtn = document.getElementById("increaseQty");
 
-    // Decrease quantity
-    decreaseBtn.addEventListener("click", () => {
-      const currentValue = parseInt(quantityInput.value);
-      if (currentValue > CONSTANTS.MIN_QUANTITY) {
-        quantityInput.value = currentValue - 1;
-        this.quantity = currentValue - 1;
-      }
-    });
+    if (decreaseBtn != null) {
+      decreaseBtn.addEventListener("click", () => {
+        const currentValue = parseInt(quantityInput.value);
+        if (currentValue > CONSTANTS.MIN_QUANTITY) {
+          quantityInput.value = currentValue - 1;
+          this.quantity = currentValue - 1;
+        }
+      });
+    }
 
-    // Increase quantity
-    increaseBtn.addEventListener("click", () => {
-      const currentValue = parseInt(quantityInput.value);
-      if (currentValue < CONSTANTS.MAX_QUANTITY) {
-        quantityInput.value = currentValue + 1;
-        this.quantity = currentValue + 1;
-      }
-    });
+    if (increaseBtn != null) {
+      increaseBtn.addEventListener("click", () => {
+        const currentValue = parseInt(quantityInput.value);
+        if (currentValue < CONSTANTS.MAX_QUANTITY) {
+          quantityInput.value = currentValue + 1;
+          this.quantity = currentValue + 1;
+        }
+      });
+    }
 
-    // Handle direct input
-    quantityInput.addEventListener("change", (e) => {
-      let value = parseInt(e.target.value);
-      if (value < CONSTANTS.MIN_QUANTITY) value = CONSTANTS.MIN_QUANTITY;
-      if (value > CONSTANTS.MAX_QUANTITY) value = CONSTANTS.MAX_QUANTITY;
-      e.target.value = value;
-      this.quantity = value;
-    });
+    if (quantityInput != null) {
+      quantityInput.addEventListener("change", (e) => {
+        let value = parseInt(e.target.value);
+        if (value < CONSTANTS.MIN_QUANTITY) {
+          value = CONSTANTS.MIN_QUANTITY;
+        }
+        if (value > CONSTANTS.MAX_QUANTITY) {
+          value = CONSTANTS.MAX_QUANTITY;
+        }
+        e.target.value = value;
+        this.quantity = value;
+      });
+    }
   }
 
   setupAddToCartButton() {
     const addToCartBtn = document.getElementById("addToCartBtn");
 
-    addToCartBtn.addEventListener("click", async () => {
-      if (!this.product) return;
-      await this.addToCart(this.product, this.quantity, addToCartBtn);
-    });
+    if (addToCartBtn != null) {
+      addToCartBtn.addEventListener("click", () => {
+        if (this.product != null) {
+          this.addToCart(this.product, this.quantity, addToCartBtn);
+        }
+      });
+    }
   }
-
 }
 
-// Initialize when DOM is loaded
+let productDetailsPage;
 document.addEventListener("DOMContentLoaded", () => {
-  new ProductDetailsPage();
+  productDetailsPage = new ProductDetailsPage();
 });
