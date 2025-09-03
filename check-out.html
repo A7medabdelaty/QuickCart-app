@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>QuickCart - Checkout</title>
     <link rel="stylesheet" href="src/styles/main.css" />
+    <link rel="stylesheet" href="src/styles/checkout.css" />
   </head>
   <body>
     <nav class="navbar">
@@ -47,15 +48,82 @@
     <!-- Main Content -->
     <main class="main-content">
       <div class="container">
-        <h1 class="page-title">
-          <i class="fas fa-credit-card"></i>
-          Checkout
-        </h1>
-        <p class="page-subtitle">Complete your purchase</p>
-        
-        <!-- Checkout content will go here -->
-        <div class="checkout-placeholder">
-          <p>Checkout functionality coming soon...</p>
+        <div class="checkout-container">
+          <div class="checkout-form-section">
+            <div class="checkout-card">
+              <div class="checkout-header">
+                <h1>Checkout</h1>
+                <p>Complete your purchase</p>
+              </div>
+              
+              <form id="checkoutForm" class="checkout-form">
+                <div class="form-section">
+                  <h3>Shipping Information</h3>
+                  <div class="form-group">
+                    <input type="text" id="firstName" placeholder="First Name" required>
+                    <span id="firstNameError" class="error"></span>
+                  </div>
+                  <div class="form-group">
+                    <input type="text" id="lastName" placeholder="Last Name" required>
+                    <span id="lastNameError" class="error"></span>
+                  </div>
+                  <div class="form-group">
+                    <input type="email" id="email" placeholder="Email Address" required>
+                    <span id="emailError" class="error"></span>
+                  </div>
+                  <div class="form-group">
+                    <input type="tel" id="phone" placeholder="Phone Number" required>
+                    <span id="phoneError" class="error"></span>
+                  </div>
+                  <div class="form-group">
+                    <input type="text" id="address" placeholder="Street Address" required>
+                    <span id="addressError" class="error"></span>
+                  </div>
+                  <div class="form-group">
+                    <input type="text" id="city" placeholder="City" required>
+                    <span id="cityError" class="error"></span>
+                  </div>
+                  <div class="form-group">
+                    <input type="text" id="state" placeholder="State" required>
+                    <span id="stateError" class="error"></span>
+                  </div>
+                  <div class="form-group">
+                    <input type="text" id="zipCode" placeholder="ZIP Code" required>
+                    <span id="zipCodeError" class="error"></span>
+                  </div>
+                </div>
+
+                <div class="form-section">
+                  <h3>Payment Information</h3>
+                  <div class="form-group">
+                    <input type="text" id="cardNumber" placeholder="Card Number" required>
+                    <span id="cardNumberError" class="error"></span>
+                  </div>
+                  <div class="form-group">
+                    <input type="text" id="expiryDate" placeholder="MM/YY" required>
+                    <span id="expiryDateError" class="error"></span>
+                  </div>
+                  <div class="form-group">
+                    <input type="text" id="cvv" placeholder="CVV" required>
+                    <span id="cvvError" class="error"></span>
+                  </div>
+                  <div class="form-group">
+                    <input type="text" id="cardName" placeholder="Name on Card" required>
+                    <span id="cardNameError" class="error"></span>
+                  </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-full checkout-submit-btn">
+                  Place Order
+                </button>
+              </form>
+            </div>
+          </div>
+
+          <div class="order-summary-section">
+            <div id="orderSummary" class="order-summary">
+            </div>
+          </div>
         </div>
       </div>
     </main>
