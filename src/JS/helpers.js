@@ -1,10 +1,8 @@
-// Helper Utilities
 import { CONSTANTS } from "./constants.js";
 
 export class Helpers {
-    // Smooth scrolling for anchor links
     static setupSmoothScrolling() {
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
                 const target = document.querySelector(this.getAttribute('href'));
@@ -13,7 +11,6 @@ export class Helpers {
         });
     }
 
-    // Render star rating
     static renderStars(rating) {
         const fullStars = Math.floor(rating);
         const hasHalfStar = rating % 1 !== 0;
@@ -26,12 +23,11 @@ export class Helpers {
         `;
     }
 
-    // Form validation
     static validateForm(form) {
         const inputs = form.querySelectorAll('input[required], textarea[required]');
         let isValid = true;
 
-        inputs.forEach(input => {
+        inputs.forEach((input) => {
             const errorElement = form.querySelector(`#${input.id}Error`);
             
             if (!input.value.trim()) {
@@ -47,7 +43,6 @@ export class Helpers {
                 input.classList.remove(CONSTANTS.CSS_CLASSES.ERROR);
             }
 
-            // Email validation
             if (input.type === 'email' && input.value.trim()) {
                 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
                 if (!emailRegex.test(input.value)) {
@@ -63,7 +58,6 @@ export class Helpers {
         return isValid;
     }
 
-    // Show notification
     static showNotification(message, type = 'info') {
         const notification = document.createElement('div');
         notification.className = `${CONSTANTS.CSS_CLASSES.NOTIFICATION} ${CONSTANTS.CSS_CLASSES.NOTIFICATION}-${type}`;
@@ -76,19 +70,6 @@ export class Helpers {
         }, CONSTANTS.NOTIFICATION_DURATION);
     }
 
-    // Update button state temporarily
-    static updateButtonState(button, text, duration = CONSTANTS.BUTTON_STATE_DURATION) {
-        const originalText = button.innerHTML;
-        button.innerHTML = text;
-        button.disabled = true;
-
-        setTimeout(() => {
-            button.innerHTML = originalText;
-            button.disabled = false;
-        }, duration);
-    }
-
-    // Format currency
     static formatCurrency(amount) {
         return new Intl.NumberFormat('en-US', {
             style: 'currency',
@@ -96,7 +77,6 @@ export class Helpers {
         }).format(amount);
     }
 
-    // Debounce function
     static debounce(func, wait) {
         let timeout;
         return function executedFunction(...args) {
@@ -109,7 +89,6 @@ export class Helpers {
         };
     }
 
-    // Email validation helper
     static validateEmail(email) {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         return emailRegex.test(email.trim());
