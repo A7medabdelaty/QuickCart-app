@@ -7,7 +7,6 @@
     <link rel="stylesheet" href="src/styles/main.css" />
   </head>
   <body>
-    <!-- Navigation Bar -->
     <nav class="navbar">
       <div class="nav-container">
         <div class="nav-logo">
@@ -48,9 +47,7 @@
       </div>
     </nav>
 
-    <!-- Main Content -->
     <main class="main-content">
-      <!-- Hero Section -->
       <section class="hero">
         <div class="hero-content">
           <h1 class="hero-title">Welcome to QuickCart</h1>
@@ -67,7 +64,6 @@
         </div>
       </section>
 
-      <!-- Products Section -->
       <section id="products" class="products">
         <div class="container">
           <h2 class="section-title">Featured Products</h2>
@@ -76,7 +72,6 @@
             <p>Loading products...</p>
           </div>
           <div class="products-grid" id="productsGrid">
-            <!-- Products will be loaded here dynamically -->
           </div>
           <div class="products-error" id="productsError" style="display: none">
             <i class="fas fa-exclamation-triangle"></i>
@@ -85,7 +80,6 @@
         </div>
       </section>
 
-      <!-- Features Section -->
       <section id="features" class="features">
         <div class="container">
           <h2 class="section-title">Why Choose QuickCart?</h2>
@@ -124,7 +118,6 @@
         </div>
       </section>
 
-      <!-- Contact Section -->
       <section id="contact" class="contact">
         <div class="container">
           <h2 class="section-title">Get in Touch</h2>
@@ -166,13 +159,13 @@
       </section>
     </main>
 
-    <!-- Footer -->
     <footer class="footer">
       <div class="container">
         <p>&copy; 2025 QuickCart. All rights reserved. Ahmed Abdelaty</p>
       </div>
     </footer>
 
+    <script type="module" src="src/js/auth-check.js"></script>
     <script type="module" src="src/js/auth.js"></script>
     <script type="module" src="src/js/home.js"></script>
   </body>
