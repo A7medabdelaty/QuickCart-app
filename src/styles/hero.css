@@ -1,11 +1,10 @@
-/* Hero Section Layout */
 .hero {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: var(--white);
   padding: var(--space-24) 0;
   display: flex;
   align-items: center;
-  min-height: 600px;
+  min-height: 100vh;
   margin-top: var(--navbar-height);
 }
 
@@ -49,7 +48,6 @@
   opacity: 0.3;
 }
 
-/* Responsive */
 @media (max-width: 768px) {
   .hero-content {
     grid-template-columns: 1fr;

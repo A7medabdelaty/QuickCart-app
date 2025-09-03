@@ -1,4 +1,3 @@
-/* Base Styles and Reset */
 * {
   box-sizing: border-box;
   margin: 0;
@@ -16,14 +15,12 @@ body {
   background-color: var(--gray-50);
 }
 
-/* Container */
 .container {
   max-width: var(--container-max-width);
   margin: 0 auto;
   padding: 0 var(--container-padding);
 }
 
-/* Common Form Elements */
 input, textarea {
   width: 100%;
   padding: var(--space-3);
@@ -45,7 +42,6 @@ textarea {
   min-height: 120px;
 }
 
-/* Form Groups */
 .form-group {
   margin-bottom: var(--space-4);
   text-align: left;
