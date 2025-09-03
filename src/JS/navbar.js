@@ -1,4 +1,3 @@
-// Navbar Component JavaScript
 import { CONSTANTS } from "./constants.js";
 import { Helpers } from "./helpers.js";
 
@@ -6,10 +5,6 @@ export class Navbar {
     constructor() {
         this.hamburger = document.querySelector('.hamburger');
         this.navMenu = document.querySelector('.nav-menu');
-        this.init();
-    }
-
-    init() {
         this.setupMobileToggle();
         this.updateActiveLink();
     }
@@ -25,8 +20,7 @@ export class Navbar {
             this.navMenu.classList.toggle(CONSTANTS.CSS_CLASSES.ACTIVE);
         });
 
-        // Close mobile menu when clicking on a link
-        document.querySelectorAll('.nav-link').forEach(link => {
+        document.querySelectorAll('.nav-link').forEach((link) => {
             link.addEventListener('click', () => {
                 this.hamburger.classList.remove(CONSTANTS.CSS_CLASSES.ACTIVE);
                 this.navMenu.classList.remove(CONSTANTS.CSS_CLASSES.ACTIVE);
@@ -42,14 +36,14 @@ export class Navbar {
 
         const updateActive = () => {
             let current = '';
-            sections.forEach(section => {
+            sections.forEach((section) => {
                 const sectionTop = section.offsetTop;
                 if (scrollY >= (sectionTop - CONSTANTS.SCROLL_OFFSET)) {
                     current = section.getAttribute('id');
                 }
             });
 
-            navLinks.forEach(link => {
+            navLinks.forEach((link) => {
                 link.classList.remove(CONSTANTS.CSS_CLASSES.ACTIVE);
                 if (link.getAttribute('href') === `#${current}`) {
                     link.classList.add(CONSTANTS.CSS_CLASSES.ACTIVE);
@@ -57,7 +51,6 @@ export class Navbar {
             });
         };
 
-        // Add debouncing to scroll event for better performance
         const debouncedUpdateActive = Helpers.debounce(updateActive, 100);
         window.addEventListener('scroll', debouncedUpdateActive);
     }

@@ -1,4 +1,3 @@
-// Home Page JavaScript
 import { BasePage } from "./base-page.js";
 import { ApiService } from "./api.js";
 import { Helpers } from "./helpers.js";
@@ -6,10 +5,6 @@ import { Helpers } from "./helpers.js";
 class HomePage extends BasePage {
   constructor() {
     super();
-    this.init();
-  }
-
-  init() {
     this.setupContactForm();
     this.loadProducts();
   }
@@ -20,21 +15,22 @@ class HomePage extends BasePage {
     const errorElement = document.getElementById("productsError");
 
     try {
-      // Show loading state
-      this.setLoadingState(loadingElement, gridElement, errorElement, true);
+      loadingElement.style.display = "block";
+      gridElement.style.display = "none";
+      errorElement.style.display = "none";
 
-      // Fetch products from API
       const featuredProducts = await ApiService.getProducts();
 
-      // Show grid
-      this.setLoadingState(loadingElement, gridElement, errorElement, false);
-      gridElement.style.display = "grid"; // Override to show as grid
+      loadingElement.style.display = "none";
+      gridElement.style.display = "grid";
+      errorElement.style.display = "none";
 
-      // Render products
       this.renderProducts(featuredProducts, gridElement);
     } catch (error) {
       console.error("Error loading products:", error);
-      this.setLoadingState(loadingElement, gridElement, errorElement, false, true);
+      loadingElement.style.display = "none";
+      gridElement.style.display = "none";
+      errorElement.style.display = "block";
       this.showError(errorElement, "Failed to load products");
     }
   }
@@ -43,60 +39,47 @@ class HomePage extends BasePage {
     container.innerHTML = products
       .map(
         (product) => `
-            <div class="product-card" data-product-id="${product.id}">
-                <a href="product-details.html?id=${
+        <div class="product-card" data-product-id="${product.id}">
+          <a href="product-details.html?id=${product.id}" class="product-link">
+            <div class="product-image">
+              <img src="${product.image}" alt="${product.title}" loading="lazy">
+              <div class="product-overlay">
+                <button class="btn btn-primary add-to-cart-btn" data-product-id="${
                   product.id
-                }" class="product-link">
-                    <div class="product-image">
-                        <img src="${product.image}" alt="${
-          product.title
-        }" loading="lazy">
-                        <div class="product-overlay">
-                            <button class="btn btn-primary add-to-cart-btn" data-product-id="${
-                              product.id
-                            }">
-                                <i class="fas fa-shopping-cart"></i> Add to Cart
-                            </button>
-                        </div>
-                    </div>
-                    <div class="product-info">
-                        <div class="product-category">${product.category}</div>
-                        <h3 class="product-title">${product.title}</h3>
-                        <div class="product-rating">
-                            ${Helpers.renderStars(product.rating.rate)}
-                            <span class="rating-count">(${
-                              product.rating.count
-                            })</span>
-                        </div>
-                        <div class="product-price">${Helpers.formatCurrency(
-                          product.price
-                        )}</div>
-                    </div>
-                </a>
+                }">
+                  <i class="fas fa-shopping-cart"></i> Add to Cart
+                </button>
+              </div>
             </div>
-        `
+            <div class="product-info">
+              <div class="product-category">${product.category}</div>
+              <h3 class="product-title">${product.title}</h3>
+              <div class="product-rating">
+                ${Helpers.renderStars(product.rating.rate)}
+                <span class="rating-count">(${product.rating.count})</span>
+              </div>
+              <div class="product-price">${Helpers.formatCurrency(
+                product.price
+              )}</div>
+            </div>
+          </a>
+        </div>
+      `
       )
       .join("");
 
-    // Add event listeners for add to cart buttons and product links
     this.setupAddToCartButtons(container);
-    this.setupProductLinks(container);
   }
 
-
   setupAddToCartButtons(container) {
-    const addToCartButtons = container.querySelectorAll(".add-to-cart-btn");
-    addToCartButtons.forEach((button) => {
+    container.querySelectorAll(".add-to-cart-btn").forEach((button) => {
       button.addEventListener("click", async (e) => {
         e.preventDefault();
         e.stopPropagation();
         const productId = parseInt(button.dataset.productId);
 
         try {
-          // Get product details
           const product = await ApiService.getProduct(productId);
-          
-          // Use consolidated add to cart functionality
           await this.addToCart(product, 1, button);
         } catch (error) {
           console.error("Error loading product for cart:", error);
@@ -106,11 +89,6 @@ class HomePage extends BasePage {
     });
   }
 
-  setupProductLinks(container) {
-    // Event prevention is now handled in setupAddToCartButtons
-    // This method can be removed or used for other product link functionality
-  }
-
   setupContactForm() {
     const contactForm = document.querySelector(".contact-form");
     if (contactForm) {
@@ -118,7 +96,6 @@ class HomePage extends BasePage {
         e.preventDefault();
 
         if (Helpers.validateForm(contactForm)) {
-          // Simulate form submission
           Helpers.showNotification(
             "Thank you for your message! We'll get back to you soon.",
             "success"
@@ -135,7 +112,6 @@ class HomePage extends BasePage {
   }
 }
 
-// Initialize when DOM is loaded
 document.addEventListener("DOMContentLoaded", () => {
   new HomePage();
 });
