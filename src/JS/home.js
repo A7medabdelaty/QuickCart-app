@@ -5,8 +5,11 @@ import { Helpers } from "./helpers.js";
 class HomePage extends BasePage {
   constructor() {
     super();
+    this.allProducts = [];
+    this.filteredProducts = [];
     this.setupContactForm();
     this.loadProducts();
+    this.setupFilterAndSort();
   }
 
   async loadProducts() {
@@ -20,12 +23,14 @@ class HomePage extends BasePage {
       errorElement.style.display = "none";
 
       const featuredProducts = await ApiService.getProducts();
+      this.allProducts = featuredProducts;
+      this.filteredProducts = [...featuredProducts];
 
       loadingElement.style.display = "none";
       gridElement.style.display = "grid";
       errorElement.style.display = "none";
 
-      this.renderProducts(featuredProducts, gridElement);
+      this.renderProducts(this.filteredProducts, gridElement);
     } catch (error) {
       console.error("Error loading products:", error);
       loadingElement.style.display = "none";
@@ -87,6 +92,104 @@ class HomePage extends BasePage {
         }
       });
     });
+  }
+
+  setupFilterAndSort() {
+    const categoryFilter = document.getElementById("categoryFilter");
+    const priceRange = document.getElementById("priceRange");
+    const sortBy = document.getElementById("sortBy");
+    const clearFilters = document.getElementById("clearFilters");
+
+    if (categoryFilter) {
+      categoryFilter.addEventListener("change", () => this.applyFiltersAndSort());
+    }
+    
+    if (priceRange) {
+      priceRange.addEventListener("change", () => this.applyFiltersAndSort());
+    }
+    
+    if (sortBy) {
+      sortBy.addEventListener("change", () => this.applyFiltersAndSort());
+    }
+    
+    if (clearFilters) {
+      clearFilters.addEventListener("click", () => this.clearAllFilters());
+    }
+  }
+
+  applyFiltersAndSort() {
+    let filtered = [...this.allProducts];
+
+    const categoryFilter = document.getElementById("categoryFilter");
+    if (categoryFilter && categoryFilter.value) {
+      filtered = filtered.filter(product => 
+        product.category.toLowerCase() === categoryFilter.value.toLowerCase()
+      );
+    }
+
+    const priceRange = document.getElementById("priceRange");
+    if (priceRange && priceRange.value) {
+      const range = priceRange.value;
+      if (range.includes('+')) {
+        const min = parseFloat(range.replace('+', ''));
+        filtered = filtered.filter(product => product.price >= min);
+      } else {
+        const [min, max] = range.split('-');
+        filtered = filtered.filter(product => 
+          product.price >= parseFloat(min) && product.price <= parseFloat(max)
+        );
+      }
+    }
+
+    const sortBy = document.getElementById("sortBy");
+    if (sortBy && sortBy.value) {
+      const [sortField, sortOrder] = sortBy.value.split('-');
+      
+      filtered.sort((a, b) => {
+        let aValue, bValue;
+        
+        switch (sortField) {
+          case 'price':
+            aValue = a.price;
+            bValue = b.price;
+            break;
+          case 'rating':
+            aValue = a.rating.rate;
+            bValue = b.rating.rate;
+            break;
+          case 'name':
+            aValue = a.title.toLowerCase();
+            bValue = b.title.toLowerCase();
+            break;
+          default:
+            return 0;
+        }
+        
+        if (sortOrder === 'asc') {
+          return aValue > bValue ? 1 : aValue < bValue ? -1 : 0;
+        } else {
+          return aValue < bValue ? 1 : aValue > bValue ? -1 : 0;
+        }
+      });
+    }
+
+    this.filteredProducts = filtered;
+    const gridElement = document.getElementById("productsGrid");
+    this.renderProducts(this.filteredProducts, gridElement);
+  }
+
+  clearAllFilters() {
+    const categoryFilter = document.getElementById("categoryFilter");
+    const priceRange = document.getElementById("priceRange");
+    const sortBy = document.getElementById("sortBy");
+
+    if (categoryFilter) categoryFilter.value = "";
+    if (priceRange) priceRange.value = "";
+    if (sortBy) sortBy.value = "";
+
+    this.filteredProducts = [...this.allProducts];
+    const gridElement = document.getElementById("productsGrid");
+    this.renderProducts(this.filteredProducts, gridElement);
   }
 
   setupContactForm() {

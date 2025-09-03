@@ -111,6 +111,47 @@
       <section id="products" class="products">
         <div class="container">
           <h2 class="section-title">Featured Products</h2>
+          
+          <!-- Filter and Sort Controls -->
+          <div class="products-controls">
+            <div class="filter-controls">
+              <label for="categoryFilter">Filter by Category:</label>
+              <select id="categoryFilter" class="filter-select">
+                <option value="">All Categories</option>
+                <option value="electronics">Electronics</option>
+                <option value="jewelery">Jewelry</option>
+                <option value="men's clothing">Men's Clothing</option>
+                <option value="women's clothing">Women's Clothing</option>
+              </select>
+              
+              <label for="priceRange">Price Range:</label>
+              <select id="priceRange" class="filter-select">
+                <option value="">All Prices</option>
+                <option value="0-25">$0 - $25</option>
+                <option value="25-50">$25 - $50</option>
+                <option value="50-100">$50 - $100</option>
+                <option value="100+">$100+</option>
+              </select>
+            </div>
+            
+            <div class="sort-controls">
+              <label for="sortBy">Sort by:</label>
+              <select id="sortBy" class="sort-select">
+                <option value="">Default</option>
+                <option value="price-asc">Price: Low to High</option>
+                <option value="price-desc">Price: High to Low</option>
+                <option value="rating-asc">Rating: Low to High</option>
+                <option value="rating-desc">Rating: High to Low</option>
+                <option value="name-asc">Name: A to Z</option>
+                <option value="name-desc">Name: Z to A</option>
+              </select>
+              
+              <button id="clearFilters" class="btn btn-secondary btn-sm">
+                <i class="fas fa-times"></i> Clear Filters
+              </button>
+            </div>
+          </div>
+          
           <div class="products-loading" id="productsLoading">
             <i class="fas fa-spinner fa-spin"></i>
             <p>Loading products...</p>
