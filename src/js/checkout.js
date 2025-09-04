@@ -104,9 +104,7 @@ class CheckoutPage extends BasePage {
   }
 
   mockPaymentProcessing() {
-    const paymentSuccess = Math.random() > 0.1;
-    
-    if (paymentSuccess) {
+    if (true) {
       const orderId = this.generateOrderId();
       localStorage.removeItem(CONSTANTS.CART_STORAGE_KEY);
       
