@@ -266,14 +266,52 @@ export class CartManager {
         this.refreshCartPage();
     }
 
-    removeCartItem(productId) {
+    async removeCartItem(productId) {
         const item = this.cartItems.find((item) => item.id === productId);
         if (!item) return;
 
-        if (confirm(`Remove "${item.title}" from your cart?`)) {
+        const result = await Swal.fire({
+            title: 'Remove Item?',
+            html: `Are you sure you want to remove <strong>"${item.title}"</strong> from your cart?`,
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: '#dc3545',
+            cancelButtonColor: '#6c757d',
+            confirmButtonText: '<i class="fas fa-trash"></i> Yes, remove it',
+            cancelButtonText: '<i class="fas fa-times"></i> Cancel',
+            reverseButtons: true,
+            focusCancel: true,
+            customClass: {
+                popup: 'swal-modern-popup',
+                title: 'swal-modern-title',
+                htmlContainer: 'swal-modern-content',
+                confirmButton: 'swal-modern-confirm',
+                cancelButton: 'swal-modern-cancel'
+            },
+            backdrop: `
+                rgba(0,0,0,0.4)
+                url("data:image/svg+xml,%3csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3e%3cg fill='none' fill-rule='evenodd'%3e%3cg fill='%23ffffff' fill-opacity='0.1'%3e%3ccircle cx='30' cy='30' r='4'/%3e%3c/g%3e%3c/g%3e%3c/svg%3e")
+                left top
+                repeat
+            `
+        });
+
+        if (result.isConfirmed) {
             this.removeFromCart(productId);
             this.refreshCartPage();
-            Helpers.showNotification(`${item.title} removed from cart`, "success");
+            
+            Swal.fire({
+                title: 'Removed!',
+                text: `${item.title} has been removed from your cart.`,
+                icon: 'success',
+                timer: 2000,
+                showConfirmButton: false,
+                toast: true,
+                position: 'top-end',
+                customClass: {
+                    popup: 'swal-toast-popup'
+                }
+            });
         }
     }
 
@@ -320,13 +358,51 @@ export class CartManager {
         }
     }
 
-    handleClearCart() {
+    async handleClearCart() {
         if (this.cartItems.length === 0) return;
 
-        if (confirm("Are you sure you want to clear your entire cart?")) {
+        const result = await Swal.fire({
+            title: 'Clear Entire Cart?',
+            html: `This will remove <strong>all ${this.cartItems.length} item${this.cartItems.length !== 1 ? 's' : ''}</strong> from your cart.<br><br>This action cannot be undone.`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#dc3545',
+            cancelButtonColor: '#6c757d',
+            confirmButtonText: '<i class="fas fa-trash-alt"></i> Yes, clear cart',
+            cancelButtonText: '<i class="fas fa-times"></i> Cancel',
+            reverseButtons: true,
+            focusCancel: true,
+            customClass: {
+                popup: 'swal-modern-popup',
+                title: 'swal-modern-title',
+                htmlContainer: 'swal-modern-content',
+                confirmButton: 'swal-modern-confirm',
+                cancelButton: 'swal-modern-cancel'
+            },
+            backdrop: `
+                rgba(0,0,0,0.4)
+                url("data:image/svg+xml,%3csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3e%3cg fill='none' fill-rule='evenodd'%3e%3cg fill='%23ffffff' fill-opacity='0.1'%3e%3ccircle cx='30' cy='30' r='4'/%3e%3c/g%3e%3c/g%3e%3c/svg%3e")
+                left top
+                repeat
+            `
+        });
+
+        if (result.isConfirmed) {
             this.clearCart();
             this.refreshCartPage();
-            Helpers.showNotification("Cart cleared successfully", "success");
+            
+            Swal.fire({
+                title: 'Cart Cleared!',
+                text: 'Your cart has been successfully cleared.',
+                icon: 'success',
+                timer: 2000,
+                showConfirmButton: false,
+                toast: true,
+                position: 'top-end',
+                customClass: {
+                    popup: 'swal-toast-popup'
+                }
+            });
         }
     }
 
