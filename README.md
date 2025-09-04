@@ -2,6 +2,10 @@
 
 A modern, responsive e-commerce web application built with vanilla JavaScript, featuring product browsing, shopping cart functionality, user authentication, and a sleek user interface.
 
+## 🎥 Live Demo & Walkthrough
+
+**[📹 Watch App Walkthrough](https://drive.google.com/file/d/1bTvu9wfYJGpWUyjkIaPi96jQrKTy7xxd/view?usp=drive_link)** - See the app in action with a complete feature demonstration
+
 ## 🚀 Features
 
 ### Core Functionality
