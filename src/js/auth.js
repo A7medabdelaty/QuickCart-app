@@ -39,8 +39,12 @@ export class AuthManager {
     const username = this.getCurrentUser() || "Guest";
     const isLoggedIn = this.isLoggedIn();
 
-    this.currentUser.textContent = username;
-    this.logoutBtn.style.display = isLoggedIn ? "flex" : "none";
+    if (this.currentUser) {
+      this.currentUser.textContent = username;
+    }
+    if (this.logoutBtn) {
+      this.logoutBtn.style.display = isLoggedIn ? "flex" : "none";
+    }
   }
 
   login(username) {
